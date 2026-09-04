@@ -5,12 +5,32 @@ See problemset-01.pdf for details.
 # no imports needed.
 
 def foo(a, b):
-    ### TODO
-    pass
+    if a == 0:
+        return b
+    elif b == 0:
+        return a
+    else:
+        x, y = min(a, b), max(a, b)
+        return foo(x, y % x)
 
 def longest_run(mylist, key):
-    ### TODO
-    pass
+    longest_run = 0
+    current_run = 0
+    for i in range(len(mylist)):
+        if mylist[i] == key:
+            current_run += 1
+        else:
+            if current_run > longest_run:
+                longest_run = current_run
+            current_run = 0
+    if current_run > longest_run:
+        longest_run = current_run
+    return longest_run
+
+            
+
+
+    
 
 
 class Result:
@@ -30,5 +50,21 @@ class Result:
     
     
 def longest_run_recursive(mylist, key):
-    ### TODO
-    pass
+    n = len(mylist)
+    if n == 0:
+        return Result(0, 0, 0, True)
+    if n == 1:
+        if mylist[0] == key:
+            return Result(1, 1, 1, True)
+        else:
+            return Result(0, 0, 0, False)
+
+    mid = n // 2
+    left = longest_run_recursive(mylist[:mid], key)
+    right = longest_run_recursive(mylist[mid:], key)
+    left_size = (mid + right.left_size) if left.is_entire_range else left.left_size
+    right_size = ((n - mid) + left.right_size) if right.is_entire_range else right.right_size
+    longest_size = max(left.longest_size, right.longest_size, left.right_size + right.left_size)
+    is_entire_range = left.is_entire_range and right.is_entire_range
+
+    return Result(left_size, right_size, longest_size, is_entire_range)
