@@ -8,7 +8,7 @@ Place all written answers from `assignment-01.md` here for easier grading.
 
 1. **Asymptotic notation**
 
-  - 1b )    **Yes**
+  - 1a )    **Yes**
  
 **Why:**
 Using the limit comparison test:
@@ -29,7 +29,7 @@ $$
 $$
 So the definition is satisfied. Hence $2^{n+1} \in O(2^n)$
 
-  - 1c ) **No**
+  - 1b ) **No**
 
  
 **Why:**
@@ -46,7 +46,7 @@ $$
  
 so, $2^{2^n} \notin O(2^n)$.
  
-  - 1d ) **No**
+  - 1c ) **No**
  
 **Why:**
 $$
@@ -68,7 +68,15 @@ $$
 $$
  
 which means $n^{1.01} \notin O(\log^2 n)$.
+  - 1d ) **Yes**
  
+**Why:**
+ 
+$$
+\lim_{a \to \infty} \frac{2^{1.01a}}{a^2} = \infty
+$$
+ 
+As shown in question (1c) the limit is $\infty$, so$$n^{1.01} \in \Omega(\log^2 n)$$ 
 
   - 1e )  **No**
  
