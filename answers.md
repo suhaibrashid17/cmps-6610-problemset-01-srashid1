@@ -17,18 +17,19 @@ $$
 \lim_{n \to \infty} \frac{2 \cdot 2^n}{2^n} = \lim_{n \to \infty} 2 = 2
 $$
  
-The limit is a finite constant, so $2^{n+1} \in O(2^n)$ 
+The limit is a finite constant so $2^{n+1} \in O(2^n)$ 
 
 **By definition:**  $f(n) \in O(g(n))$ if there exist constants $c > 0$ and $n_0 \geq 0$ such that $f(n) \leq c\cdot g(n)$ for all $n \geq n_0$.
  
 Since $2^{n+1} = 2\cdot 2^n$ 
-choosing $c = 2$ and $n_0 = 0$. 
+if we choose $c = 2$ and $n_0 = 0$. 
 Then for all $n \geq 0$:
 $$
  2\cdot 2^n \leq 2\cdot 2^n
 $$
 So the definition is satisfied. Hence $2^{n+1} \in O(2^n)$
-  - 1c ) **No.**
+
+  - 1c ) **No**
 
  
 **Why:**
@@ -36,7 +37,7 @@ $$
 \lim_{n \to \infty} \frac{2^{2^n}}{2^n} = \lim_{n \to \infty} 2^{2^n - n}
 $$
  
-Since $2^n$ grows exponentially and $n$ grows only linearly, $2^n - n \to \infty$ as $n \to \infty$. 
+As $2^n$ grows exponentially and $n$ grows only linearly, $2^n - n \to \infty$ as $n \to \infty$. 
 Therefore:
  
 $$
@@ -45,7 +46,7 @@ $$
  
 so, $2^{2^n} \notin O(2^n)$.
  
-  - 1d ) **No.**
+  - 1d ) **No**
  
 **Why:**
 $$
@@ -69,7 +70,7 @@ $$
 which means $n^{1.01} \notin O(\log^2 n)$.
  
 
-  - 1e )  **No.**
+  - 1e )  **No**
  
 **Why:**
 $$
@@ -84,8 +85,7 @@ $$
 \lim_{m \to \infty} \frac{2^{m/2}}{m^3}
 $$
  
-This is an exponential over a polynomial ($\frac{\infty}{\infty}$ form)
-so:
+This is an exponential over a polynomial so:
  
 $$
 \lim_{m \to \infty} \frac{2^{m/2}}{m^3} = \infty
@@ -93,46 +93,71 @@ $$
  
 i.e. $\sqrt{n} \notin O(\log^3 n)$.
 
-  - 1f ) **Yes.**
+  - 1f ) **Yes**
  
 **Why:**
 $$
-\lim_{n \to \infty} \frac{\sqrt{n}}{\log^3 n} = \infty \quad 
+\lim_{n \to \infty} \frac{\sqrt{n}}{\log^3 n} = \infty 
 $$
  
-As shown in question **1e** the limit is $\infty$, so$$\sqrt{n} \in \Omega(\log^3 n)$$ 
+As shown in question (1e) the limit is $\infty$, so$$\sqrt{n} \in \Omega(\log^3 n)$$ 
  
 
-  - 1g
+  - 1g ) The definations for small o and small omega are:
+  $$f(n) \le c \cdot g(n), \text{ for all } c$$$$f(n) \ge c \cdot g(n), \text{ for all } c$$
+ 
+Let's assume there is an f(n) that satisfies both conditions. So:
+ 
+$$c \cdot g(n) \le f(n) \le c \cdot g(n), \text{ for all } c$$
+ 
+This basically means:
+ 
+$$f(n) = c \cdot g(n), \text{ for all } c$$
+ 
+But this must hold for every positive constant c since f(n) is one fixed function. So it must be true for example for c = 1 and for c = 2 simultaneously:
+ 
+$$f(n) = 1 \cdot g(n)$$
+$$f(n) = 2 \cdot g(n)$$
+ 
+Combining these:
+ 
+$$g(n) = 2 \cdot g(n)$$
+ 
+dividing both sides by $g(n)$ gives:
+ 
+$$1 = 2$$
+ 
+This is a contradiction.
+ 
+Therefore, no such f(n) exists and $o(g(n)) \cap \omega(g(n))$ is an empty set.
+ 
 
 2. **SPARC to Python**
 
-  - 2b ) `foo(a, b)` computes the GCD of `a` and `b`. It repeatedly replaces the larger number with the remainder of dividing it by the smaller one, until one of the numbers hits 0 — at that point the other number is the GCD.
+  - 2b ) foo(a, b) computes the GCD of a and b. It repeatedly replaces the larger number with the remainder of dividing it by the smaller number, until one of them hits 0, then the other number is the GCD.
 
-  - 2c ) **Work** = total operations; **span** = longest chain of dependent operations.
- Each call to `foo` does O(1) work and makes exactly **one** recursive call (no branching), so the whole computation is a single sequential chain: $\text{Work}(n) = \text{Span}(n)$.
- The number of recursive calls is bounded by $O(\log(\min(a,b)))$ (Lamé's theorem). So, letting $n = \max(a,b)$:
- $$\text{Work}(n) = \text{Span}(n) = O(\log n)$$
- Since Work = Span, parallelism (Work/Span) is $O(1)$ — the recursion is inherently sequential.
+  - 2c ) Each call to foo does constant work and makes exactly one recursive call, so the whole computation is sequential which means Work = Span.
+ $$Work = Span = O(\log n)$$
+
 
 3. **Parallelism and recursion**
 
-  - 3b ) A single loop scans all $n$ elements once, doing O(1) work per iteration (comparison, increment/reset, comparison against max). Since it's one sequential loop with no parallelism, every iteration lies on the same dependency chain:
- $$\text{Work}(n) = O(n), \qquad \text{Span}(n) = O(n)$$
+  - 3b ) A single loop scans all n elements once doing constant work per iteration. So:
+ $$Work = O(n),  Span = O(n)$$
 
-  - 3d ) Each call splits the array in half, recurses on both halves, then does O(1) work combining the two `Result`s. Since neither recursive call runs in parallel here (they execute one after the other), both Work and Span follow the same recurrence:
+  - 3d ) Each call splits the array in half, recurses on both halves, then does constant work combining the two results. Since no recursive call runs in parallel, work and span are the same:
  
-$$W(n) = 2W(n/2) + O(1) \;\Rightarrow\; O(n)$$
-$$S(n) = 2S(n/2) + O(1) \;\Rightarrow\; O(n)$$
- So $\text{Work}(n) = O(n)$ and $\text{Span}(n) = O(n)$ — being recursive alone doesn't help unless the calls actually run concurrently.
-  - 3e ) Total work doesn't change — the same number of operations happen regardless of scheduling:
- 
-$$W(n) = 2W(n/2) + O(1) \;\Rightarrow\; O(n)$$
+$$Work = 2W(n/2) + O(1) = O(n)$$
+$$Span = 2S(n/2) + O(1) = O(n)$$
 
-But now the two recursive calls run concurrently, so the span only accounts for the slower of the two branches, not both added together:
+  - 3e ) Total work doesn't change as the same number of operations happen:
  
-$$S(n) = \max\big(S(n/2), S(n/2)\big) + O(1) = S(n/2) + O(1) \;\Rightarrow\; O(\log n)$$
+$$Work = 2W(n/2) + O(1) = O(n)$$
+
+But now the two recursive calls run concurrently, so the span only accounts for the slower of the two branches not both added together:
  
-So $\text{Work}(n) = O(n)$, $\text{Span}(n) = O(\log n)$ — this is where parallelism pays off, since the parallelism (Work/Span) becomes $O(n/\log n)$, versus $O(1)$ in 3b and 3d.
+$$Span = \max(S(n/2), S(n/2)) + O(1) = S(n/2) + O(1) = O(\log n)$$
+ 
+
 
 4. **GCD**
